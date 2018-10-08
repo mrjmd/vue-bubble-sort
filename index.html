@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bubble sortin' with Vuejs</title>
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <div id="bubblesort">
+    <p>Let's play with bubble sorting!</p>
+    <p>Each page load, or time you click the "Shuffle" button below, we generate ten random numbers.</p>
+    <p>Then, by clicking "Step" or "Sort", you can re-arrange the values in descending order.</p>
+    <p>Current array values: {{ message }}</p>
+    <div style="display: block; width: 500px;">
+      <array-item
+        v-for="value in values"
+        v-bind:value="value"
+        v-bind:style="{ 
+          border: 'solid 1px',
+          width: value + '%',
+          margin: '3px'
+        }"
+        v-bind:key="value.key">
+      </array-item>
+    </div>
+    <button v-on:click="generateArray">Shuffle</button>
+    <button v-on:click="stepAhead" :disabled=isDisabled>Step</button>
+    <button v-on:click="sort" :disabled=isDisabled>Sort</button>
+  </div>
+
+  <script>
+    const randomArray = () => [...new Array(10)].map(() => Math.round(Math.random() * 100));
+    const initialArray = randomArray()
+    Vue.component('array-item', {
+      props: ['value'],
+      template: '<div class="array-item">{{ value }}</div>'
+    })
+    const app = new Vue({
+      el: '#bubblesort',
+      data: {
+        values: initialArray,
+        message: initialArray.join(' / '),
+        sortable: true
+      },
+      methods: {
+        generateArray: function () {
+          this.values = randomArray()
+          this.message = this.values.join(' / ')
+          this.sortable = true
+        },
+        stepAhead: function () {
+          console.log('take a step')
+          const values = this.values;
+          const length = values.length - 1;
+          for(let i = 0; i < length; ++i) {
+            console.log('loopin')
+            if (values[i] < values[i+1]) {
+              const temp = values[i];
+              values[i] = values[i+1];
+              values[i+1] = temp;
+              break;
+            }
+          }
+          this.values = values
+          this.message = this.values.join(' / ')
+        },
+        sort: function () {
+          const values = this.values;
+          const length = values.length - 1;
+          do {
+            var swapped = false;
+            for(let i = 0; i < length; ++i) {
+              if (values[i] < values[i+1]) {
+                const temp = values[i]
+                values[i] = values[i+1]
+                values[i+1] = temp
+                swapped = true
+              }
+            }
+          }
+          while(swapped === true);
+          this.values = values
+          this.message = this.values.join(' / ')
+          this.sortable = false
+        }
+      },
+      computed: {
+        isDisabled() {
+          return !this.sortable
+        }
+      }
+    })
+  </script>
+</body>
+</html>
