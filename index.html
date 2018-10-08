@@ -26,9 +26,9 @@
     <button v-on:click="generateArray">Shuffle</button>
     <button v-on:click="stepAhead" :disabled=isDisabled>Step</button>
     <button v-on:click="sort" :disabled=isDisabled>Sort</button>
-    <p>Index: {{ index }}</p>
-    <p>Current: {{ current }}</p>
-    <p>Next: {{ next }}</p>
+    <p v-if="index || index === 0">Index: {{ index }}</p>
+    <p v-if="current">Current: {{ current }}</p>
+    <p v-if="next">Next: {{ next }}</p>
   </div>
 
   <script>
