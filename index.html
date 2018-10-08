@@ -28,8 +28,10 @@
   </div>
 
   <script>
+    // Generate ten random numbers < 100.
     const randomArray = () => [...new Array(10)].map(() => Math.round(Math.random() * 100));
     const initialArray = randomArray()
+    // Each item it its own tiny component.
     Vue.component('array-item', {
       props: ['value'],
       template: '<div class="array-item">{{ value }}</div>'
@@ -47,28 +49,29 @@
           this.message = this.values.join(' / ')
           this.sortable = true
         },
+        // This whole method could be combined into the main sort method
+        // with a 'step' boolean parameter or the like.
         stepAhead: function () {
-          console.log('take a step')
           const values = this.values;
-          const length = values.length - 1;
-          for(let i = 0; i < length; ++i) {
-            console.log('loopin')
+          for(let i = 0; i < 9; ++i) {
             if (values[i] < values[i+1]) {
-              const temp = values[i];
-              values[i] = values[i+1];
-              values[i+1] = temp;
-              break;
+              const temp = values[i]
+              values[i] = values[i+1]
+              values[i+1] = temp
+              break
             }
           }
+          // Not currently setting this.sortable here, would need
+          // to calculate ahead and determine is sorting is complete
+          // to allow for this.
           this.values = values
           this.message = this.values.join(' / ')
         },
         sort: function () {
-          const values = this.values;
-          const length = values.length - 1;
+          const values = this.values
           do {
             var swapped = false;
-            for(let i = 0; i < length; ++i) {
+            for (let i = 0; i < 9; ++i) {
               if (values[i] < values[i+1]) {
                 const temp = values[i]
                 values[i] = values[i+1]
