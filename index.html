@@ -26,6 +26,9 @@
     <button v-on:click="generateArray">Shuffle</button>
     <button v-on:click="stepAhead" :disabled=isDisabled>Step</button>
     <button v-on:click="sort" :disabled=isDisabled>Sort</button>
+    <p>Index: {{ index }}</p>
+    <p>Current: {{ current }}</p>
+    <p>Next: {{ next }}</p>
   </div>
 
   <script>
@@ -42,19 +45,26 @@
       data: {
         values: initialArray,
         message: initialArray.join(' / '),
-        sortable: true
+        sortable: true,
+        index: '',
+        current: '',
+        next: '',
       },
       methods: {
         generateArray: function () {
           this.values = randomArray()
           this.message = this.values.join(' / ')
           this.sortable = true
+          this.index = this.current = this.next = ''
         },
         // This whole method could be combined into the main sort method
         // with a 'step' boolean parameter or the like.
         stepAhead: function () {
           const values = this.values;
           for(let i = 0; i < 9; ++i) {
+            this.index = i
+            this.current = values[i]
+            this.next = values[i+1]
             if (values[i] < values[i+1]) {
               const temp = values[i]
               values[i] = values[i+1]
@@ -85,6 +95,7 @@
           this.values = values
           this.message = this.values.join(' / ')
           this.sortable = false
+          this.index = this.current = this.next = ''
         }
       },
       computed: {
